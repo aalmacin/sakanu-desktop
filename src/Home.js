@@ -1,6 +1,8 @@
 // Home.js
 import React from 'react';
-import AuthButton from './AuthButton'; // Adjust the path as necessary
+import AuthButton from './AuthButton';
+import {Link} from "react-router-dom"; // Adjust the path as necessary
+import './Home.css';
 
 const Home = () => {
     return (
@@ -11,8 +13,10 @@ const Home = () => {
                 educational experience. Through our integration with Anki, we provide
                 a seamless and interactive learning environment.
             </p>
-
-            <AuthButton />
+            <div className="search-for-term">
+                <Link to="/search">Search for a term</Link>
+            </div>
+            <AuthButton/>
         </div>
     );
 };

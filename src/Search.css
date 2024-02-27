@@ -1,0 +1,35 @@
+/* Search.css */
+.search-container {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.search-container .domain-select, .search-term-input {
+    margin: 20px 0;
+}
+
+.search-container input[type="text"], .domain-select div {
+    width: 100%;
+    padding: 15px; /* Increased padding for easier touch interaction */
+    box-sizing: border-box;
+    border: 1px solid #dddddd;
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Increased font size for better readability on small screens */
+}
+
+.search-container button {
+    padding: 15px 25px; /* Increased padding for easier touch interaction */
+    background-color: #007BFF;
+    width: 100%;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 16px; /* Increased font size for better readability on small screens */
+}
+
+.search-container button:hover {
+    background-color: #0056b3;
+}

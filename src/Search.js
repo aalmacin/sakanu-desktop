@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
+import './Search.css';
 
 const Search = () => {
     const domains = [
@@ -29,24 +30,31 @@ const Search = () => {
     });
 
     // Options for react-select
-    const domainOptions = domains.map(domain => ({ label: domain.title, value: domain.title }));
+    const domainOptions = domains.map(domain => ({label: domain.title, value: domain.title}));
 
     return (
-        <form onSubmit={formik.handleSubmit}>
-            <Select
-                options={domainOptions}
-                onChange={value => formik.setFieldValue('domain', value)}
-                placeholder="Select a domain"
-            />
-            <input
-                type="text"
-                name="searchTerm"
-                onChange={formik.handleChange}
-                value={formik.values.searchTerm}
-                placeholder="Enter search term"
-            />
-            <button type="submit">Submit</button>
-        </form>
+        <div className="search-container">
+            <form onSubmit={formik.handleSubmit}>
+                <Select
+                    options={domainOptions}
+                    onChange={value => formik.setFieldValue('domain', value)}
+                    placeholder="Select a domain"
+                />
+                <div className="search-term-input">
+                    <input
+                        type="text"
+                        name="searchTerm"
+                        onChange={formik.handleChange}
+                        value={formik.values.searchTerm}
+                        placeholder="Enter search term"
+                    />
+                </div>
+
+                <div className="search-submit">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
     );
 };
 

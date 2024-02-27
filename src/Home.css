@@ -1,0 +1,44 @@
+/* Home.css */
+.home-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.home-container h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+.home-container p {
+    font-size: 1em;
+    color: #666;
+}
+
+.home-container a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.home-container a:hover {
+    text-decoration: underline;
+}
+
+/* Home.css */
+.search-for-term {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    text-align: center;
+}
+
+.search-for-term a {
+    color: #333333;
+    text-decoration: none;
+}
+
+.search-for-term a:hover {
+    color: #007BFF;
+}
