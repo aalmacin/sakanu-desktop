@@ -1,0 +1,30 @@
+/* Result.css */
+.result-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.result-container h2, h3, h4 {
+    color: #333;
+}
+
+.result-container p {
+    font-size: 1em;
+    color: #666;
+}
+
+.result-container ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.result-container ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.result-container ul li:last-child {
+    border-bottom: none;
+}

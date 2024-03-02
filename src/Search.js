@@ -1,7 +1,8 @@
 import React from 'react';
-import Select from 'react-select';
 import {useFormik} from 'formik';
 import './Search.css';
+import Result from "./Result";
+import CreatableSelect from "react-select/creatable";
 
 const Search = () => {
     const domains = [
@@ -18,14 +19,43 @@ const Search = () => {
             description: 'Learn about the forces and laws of nature',
         },
     ];
+
+    const termResponse = {
+        searchTerm: 'Photosynthesis',
+        domain: 'Biology',
+        flashcardFront: 'What is {{c1::photosynthesis}}?',
+        description: 'Photosynthesis is a process used by plants and other organisms to convert light energy into chemical energy that can later be released to fuel the organisms\' activities.',
+        purpose: 'The purpose of photosynthesis is to produce food for the plant.',
+        simpleExplanation: 'Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods with the help of chlorophyll.',
+        questions: [
+            {
+                question: 'What is photosynthesis?',
+                answer: 'Photosynthesis is a process used by plants and other organisms to convert light energy into chemical energy that can later be released to fuel the organisms\' activities.'
+            },
+            {
+                question: 'What is the purpose of photosynthesis?',
+                answer: 'The purpose of photosynthesis is to produce food for the plant.'
+            }
+        ],
+        relatedTerms: ['Chlorophyll', 'Glucose', 'Calvin Cycle'],
+        categories: ['Biology', 'Botany']
+    }
     const formik = useFormik({
         initialValues: {
             domain: '',
             searchTerm: ''
         },
-        onSubmit: values => {
-            console.log(values);
-            // Handle the form submission here
+        onSubmit: ({domain: {value: domain}, searchTerm}) => {
+            console.log("I submitted", domain, searchTerm);
+            console.log("I submitted here", process.env.REACT_APP_API_URL);
+            fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("I arrived", data);
+                })
+                .catch(error => {
+                    console.error('There was an error!', error);
+                });
         },
     });
 
@@ -35,10 +65,11 @@ const Search = () => {
     return (
         <div className="search-container">
             <form onSubmit={formik.handleSubmit}>
-                <Select
+                <CreatableSelect
                     options={domainOptions}
                     onChange={value => formik.setFieldValue('domain', value)}
                     placeholder="Select a domain"
+                    isClearable
                 />
                 <div className="search-term-input">
                     <input
@@ -54,6 +85,7 @@ const Search = () => {
                     <button type="submit">Submit</button>
                 </div>
             </form>
+            {termResponse && <Result termResponse={termResponse}/>}
         </div>
     );
 };
