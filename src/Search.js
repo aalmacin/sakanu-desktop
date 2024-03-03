@@ -9,7 +9,8 @@ const Search = () => {
 
     const [domains, setDomains] = useState([]);
 
-    useEffect(() => {
+    // Function to fetch domains
+    const fetchDomains = () => {
         fetch(`${process.env.REACT_APP_API_URL}/domains`)
             .then(response => response.json())
             .then(data => {
@@ -18,6 +19,10 @@ const Search = () => {
             .catch(error => {
                 console.error('There was an error!', error);
             });
+    };
+
+    useEffect(() => {
+        fetchDomains();
     }, []);
 
 
@@ -31,6 +36,7 @@ const Search = () => {
                 .then(response => response.json())
                 .then(data => {
                     setTermResponse(data);
+                    fetchDomains();
                 })
                 .catch(error => {
                     console.error('There was an error!', error);
@@ -38,7 +44,6 @@ const Search = () => {
         },
     });
 
-    console.log(domains);
     // Options for react-select
     const domainOptions = domains.map(domain => ({label: domain, value: domain}));
 
