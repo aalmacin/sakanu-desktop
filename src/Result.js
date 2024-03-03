@@ -34,8 +34,8 @@ const Result = ({termResponse}) => {
                     <li key={index}>{category}</li>
                 ))}
             </ul>
-            <h3>Anki Front</h3>
-            <p>{termResponse.flashcardFront}</p>
+            <h3>Anki Cloze</h3>
+            <p>{termResponse.cloze}</p>
         </div>
     );
 };
