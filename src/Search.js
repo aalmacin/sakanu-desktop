@@ -11,14 +11,21 @@ const Search = () => {
 
     // Function to fetch domains
     const fetchDomains = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/domains`)
-            .then(response => response.json())
-            .then(data => {
-                setDomains(data);
+        fetch(process.env.REACT_APP_ANKI_CONNECT_URL, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json',
+            }, body: JSON.stringify({
+                action: 'deckNames', version: 6
             })
-            .catch(error => {
-                console.error('There was an error!', error);
-            });
+        }).then(response => {
+            console.log('Domain Response:', response)
+            return response.json();
+        }).then(data => {
+            console.log('Domains:', data)
+            setDomains(data.result);
+        }).catch(error => {
+            console.error('There was an error!', error);
+        });
     };
 
     useEffect(() => {
@@ -28,10 +35,8 @@ const Search = () => {
 
     const formik = useFormik({
         initialValues: {
-            domain: '',
-            searchTerm: ''
-        },
-        onSubmit: ({domain: {value: domain}, searchTerm}) => {
+            domain: '', searchTerm: ''
+        }, onSubmit: ({domain: {value: domain}, searchTerm}) => {
             fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`)
                 .then(response => response.json())
                 .then(data => {
@@ -47,32 +52,30 @@ const Search = () => {
     // Options for react-select
     const domainOptions = domains.map(domain => ({label: domain, value: domain}));
 
-    return (
-        <div className="search-container">
-            <form onSubmit={formik.handleSubmit}>
-                <CreatableSelect
-                    options={domainOptions}
-                    onChange={value => formik.setFieldValue('domain', value)}
-                    placeholder="Select a domain"
-                    isClearable
+    return (<div className="search-container">
+        <form onSubmit={formik.handleSubmit}>
+            <CreatableSelect
+                options={domainOptions}
+                onChange={value => formik.setFieldValue('domain', value)}
+                placeholder="Select a domain"
+                isClearable
+            />
+            <div className="search-term-input">
+                <input
+                    type="text"
+                    name="searchTerm"
+                    onChange={formik.handleChange}
+                    value={formik.values.searchTerm}
+                    placeholder="Enter search term"
                 />
-                <div className="search-term-input">
-                    <input
-                        type="text"
-                        name="searchTerm"
-                        onChange={formik.handleChange}
-                        value={formik.values.searchTerm}
-                        placeholder="Enter search term"
-                    />
-                </div>
+            </div>
 
-                <div className="search-submit">
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
-            {termResponse && <Result termResponse={termResponse}/>}
-        </div>
-    );
+            <div className="search-submit">
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        {termResponse && <Result termResponse={termResponse}/>}
+    </div>);
 };
 
 export default Search;
