@@ -3,6 +3,7 @@ import {useFormik} from 'formik';
 import './Search.css';
 import Result from "./Result";
 import CreatableSelect from "react-select/creatable";
+import AnkiConnectService from "./AnkiConnectService";
 
 const Search = () => {
     const [termResponse, setTermResponse] = useState(null);
@@ -11,13 +12,7 @@ const Search = () => {
 
     // Function to fetch domains
     const fetchDomains = () => {
-        fetch(process.env.REACT_APP_ANKI_CONNECT_URL, {
-            method: 'POST', headers: {
-                'Content-Type': 'application/json',
-            }, body: JSON.stringify({
-                action: 'deckNames', version: 6
-            })
-        }).then(response => {
+        AnkiConnectService.getDecks().then(response => {
             console.log('Domain Response:', response)
             return response.json();
         }).then(data => {
