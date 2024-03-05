@@ -4,11 +4,34 @@ import './Search.css';
 import Result from "./Result";
 import CreatableSelect from "react-select/creatable";
 import AnkiConnectService from "./AnkiConnectService";
+import AnkiModelCreatorService from "./AnkiModelCreatorService";
 
 const Search = () => {
     const [termResponse, setTermResponse] = useState(null);
 
     const [domains, setDomains] = useState([]);
+
+    const [modelExists, setModelExists] = useState(false);
+
+    useEffect(() => {
+        AnkiConnectService.modelExists().then(response => {
+            console.log('Model Exists:', response)
+            return setModelExists(response);
+        }).catch(error => {
+            console.error('There was an error!', error);
+        });
+    }, []);
+    const createModel = () => {
+        AnkiModelCreatorService.createModel().then(response => {
+            console.log('Model Created:', response)
+            return response.json();
+        }).then(data => {
+            console.log('Model Created:', data)
+            setModelExists(data.result);
+        }).catch(error => {
+            console.error('There was an error!', error);
+        });
+    };
 
     // Function to fetch domains
     const fetchDomains = () => {
@@ -24,8 +47,10 @@ const Search = () => {
     };
 
     useEffect(() => {
-        fetchDomains();
-    }, []);
+        if (modelExists) {
+            fetchDomains();
+        }
+    }, [modelExists]);
 
 
     const formik = useFormik({
@@ -43,6 +68,13 @@ const Search = () => {
                 });
         },
     });
+
+    if (!modelExists) {
+        return <div className="create-model">
+            <p>Model does not exist</p>
+            <button className="create-model-button" onClick={createModel}>Create Model</button>
+        </div>;
+    }
 
     // Options for react-select
     const domainOptions = domains.map(domain => ({label: domain, value: domain}));

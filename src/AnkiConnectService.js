@@ -1,3 +1,5 @@
+import AnkiModelCreatorService from "./AnkiModelCreatorService";
+
 class AnkiConnectService {
     getDecks() {
         return this.sendReq('deckNames', 'POST');
@@ -13,8 +15,15 @@ class AnkiConnectService {
             body: JSON.stringify({
                 action,
                 version: 6,
-                ...params
+                params
             })
+        });
+    }
+
+    modelExists() {
+        return AnkiModelCreatorService.getModels().then(models => {
+            console.log('Models:', models);
+            return models && models.result && models.result.includes('Sakanu');
         });
     }
 }
