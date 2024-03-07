@@ -3,8 +3,10 @@ import {useFormik} from 'formik';
 import './Search.css';
 import Result from "./Result";
 import CreatableSelect from "react-select/creatable";
-import AnkiConnectService from "./AnkiConnectService";
-import AnkiModelCreatorService from "./AnkiModelCreatorService";
+import AnkiModelCreatorService from "./anki/AnkiModelService";
+import AnkiDeckService from "./anki/AnkiDeckService";
+import AnkiModelService from "./anki/AnkiModelService";
+import AnkiNoteService from "./anki/AnkiNoteService";
 
 const Search = () => {
     const [termResponse, setTermResponse] = useState(null);
@@ -14,7 +16,7 @@ const Search = () => {
     const [modelExists, setModelExists] = useState(false);
 
     useEffect(() => {
-        AnkiConnectService.modelExists().then(response => {
+        AnkiModelService.modelExists().then(response => {
             console.log('Model Exists:', response)
             return setModelExists(response);
         }).catch(error => {
@@ -35,7 +37,7 @@ const Search = () => {
 
     // Function to fetch domains
     const fetchDomains = () => {
-        AnkiConnectService.getDecks().then(response => {
+        AnkiDeckService.getDecks().then(response => {
             console.log('Domain Response:', response)
             return response.json();
         }).then(data => {
@@ -61,10 +63,19 @@ const Search = () => {
                 .then(response => response.json())
                 .then(data => {
                     setTermResponse(data);
-                    fetchDomains();
+                    AnkiDeckService.createDeck(domain).then(deckResponse => {
+                        console.log('Deck Created:', deckResponse)
+                        AnkiNoteService.addNote(domain, data).then(noteResponse => {
+                            console.log('Note Created:', noteResponse)
+                        }).catch(error => {
+                            console.error('There was an error creating the note!', error);
+                        });
+                    }).catch(error => {
+                        console.error('There was an error creating the deck!', error);
+                    });
                 })
                 .catch(error => {
-                    console.error('There was an error!', error);
+                    console.error('There was an error setting term response!', error);
                 });
         },
     });
