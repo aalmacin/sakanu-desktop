@@ -59,6 +59,7 @@ const Search = () => {
         initialValues: {
             domain: '', searchTerm: ''
         }, onSubmit: ({domain: {value: domain}, searchTerm}) => {
+            setTermResponse(null);
             fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`)
                 .then(response => response.json())
                 .then(data => {
