@@ -34,4 +34,5 @@ class AnkiNoteService {
     }
 }
 
-export default new AnkiNoteService();
+const ankiNoteService = new AnkiNoteService();
+export default ankiNoteService;

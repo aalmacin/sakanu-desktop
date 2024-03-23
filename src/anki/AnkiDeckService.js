@@ -10,4 +10,5 @@ class AnkiDeckService {
     }
 }
 
-export default new AnkiDeckService();
+const ankiDeckService = new AnkiDeckService();
+export default ankiDeckService;

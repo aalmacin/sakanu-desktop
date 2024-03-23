@@ -16,4 +16,5 @@ class AnkiConnectService {
 
 }
 
-export default new AnkiConnectService();
+const ankiConnectService = new AnkiConnectService();
+export default ankiConnectService;

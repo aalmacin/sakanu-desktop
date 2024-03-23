@@ -140,4 +140,5 @@ class AnkiModelService {
     }
 }
 
-export default new AnkiModelService();
+const ankiModelService = new AnkiModelService();
+export default ankiModelService;
