@@ -1,6 +1,5 @@
 // Home.js
 import React from 'react';
-import AuthButton from './AuthButton';
 import {Link} from "react-router-dom"; // Adjust the path as necessary
 import './Home.css';
 
@@ -16,7 +15,6 @@ const Home = () => {
             <div className="search-for-term">
                 <Link to="/search">Search for a term</Link>
             </div>
-            <AuthButton/>
         </div>
     );
 };

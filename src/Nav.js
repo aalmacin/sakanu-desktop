@@ -2,14 +2,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Nav.css';
+import AuthButton from "./AuthButton";
 
 const Nav = () => {
     return (
         <nav>
-            <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/search">Search</Link></li>
-            </ul>
+            <div className="logo-links">
+                <Link to="/">
+                    <img src="/logo-main.png" alt="Logo" className="nav-logo"/>
+                </Link>
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/search">Search</Link></li>
+                </ul>
+            </div>
+            <AuthButton/>
         </nav>
     );
 };
