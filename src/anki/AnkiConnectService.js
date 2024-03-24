@@ -1,4 +1,17 @@
 class AnkiConnectService {
+    requestPermission() {
+        return fetch(process.env.REACT_APP_ANKI_CONNECT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'requestPermission',
+                version: 6
+            })
+        });
+    }
+
     sendReq(action, method, headers = {}, params = {}) {
         return fetch(process.env.REACT_APP_ANKI_CONNECT_URL, {
             method,

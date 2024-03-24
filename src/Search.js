@@ -7,6 +7,7 @@ import AnkiModelCreatorService from "./anki/AnkiModelService";
 import AnkiDeckService from "./anki/AnkiDeckService";
 import AnkiModelService from "./anki/AnkiModelService";
 import AnkiNoteService from "./anki/AnkiNoteService";
+import AnkiConnectService from "./anki/AnkiConnectService";
 
 const Search = () => {
     const [termResponse, setTermResponse] = useState(null);
@@ -15,12 +16,22 @@ const Search = () => {
 
     const [modelExists, setModelExists] = useState(false);
 
+    const [errorAnkiConnect, setErrorAnkiConnect] = useState(false);
+
     useEffect(() => {
-        AnkiModelService.modelExists().then(response => {
-            console.log('Model Exists:', response)
-            return setModelExists(response);
+        AnkiConnectService.requestPermission().then(response => {
+            if (response.ok) {
+                AnkiModelService.modelExists().then(response => {
+                    console.log('Model Exists:', response)
+                    return setModelExists(response);
+                }).catch(error => {
+                    console.error('There was an error!', error);
+                });
+            } else {
+                console.error('Permission not granted:', response);
+            }
         }).catch(error => {
-            console.error('There was an error!', error);
+            setErrorAnkiConnect(true);
         });
     }, []);
     const createModel = () => {
@@ -80,6 +91,27 @@ const Search = () => {
                 });
         },
     });
+
+    if (errorAnkiConnect) {
+        return <div>
+            <h2>There was an error connecting to Anki</h2>
+            <div className="error-container">
+                <ol>
+                    <li>Ensure Anki is running</li>
+                    <li>Ensure AnkiConnect is installed. You can download it from <a
+                        href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiWeb</a></li>
+                    <li>Under tools, click on Add-ons. Select AnkiConnect and click on Config. Add
+                        "https://sakanu.raidrin.com" on webCorsOriginList. It should look like this
+                        <div>
+                            <img src="/corslist.png" alt="Showing addon config"/>
+                        </div>
+                        Save the config and restart Anki
+                    </li>
+                    <li>Refresh this page. <a href="/search">Refresh</a></li>
+                </ol>
+            </div>
+        </div>;
+    }
 
     if (!modelExists) {
         return <div className="create-model">
