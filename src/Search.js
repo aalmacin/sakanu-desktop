@@ -99,6 +99,7 @@ const Search = () => {
                 <ol>
                     <li>Ensure Anki is running</li>
                     <li>Ensure AnkiConnect is installed. You can download it from <a
+                        rel="noreferrer"
                         href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiWeb</a></li>
                     <li>Under tools, click on Add-ons. Select AnkiConnect and click on Config. Add
                         "https://sakanu.raidrin.com" on webCorsOriginList. It should look like this
@@ -107,7 +108,7 @@ const Search = () => {
                         </div>
                         Save the config and restart Anki
                     </li>
-                    <li>Refresh this page. <a href="/search">Refresh</a></li>
+                    <li>Refresh the page. <a href="/search">Refresh</a></li>
                 </ol>
             </div>
         </div>;
