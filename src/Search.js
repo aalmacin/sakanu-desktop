@@ -18,6 +18,8 @@ const Search = () => {
 
     const [errorAnkiConnect, setErrorAnkiConnect] = useState(false);
 
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         AnkiConnectService.requestPermission().then(response => {
             if (response.ok) {
@@ -70,6 +72,7 @@ const Search = () => {
         initialValues: {
             domain: '', searchTerm: ''
         }, onSubmit: ({domain: {value: domain}, searchTerm}) => {
+            setLoading(true);
             setTermResponse(null);
             fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`)
                 .then(response => response.json())
@@ -84,11 +87,13 @@ const Search = () => {
                         });
                     }).catch(error => {
                         console.error('There was an error creating the deck!', error);
+                    }).finally(() => {
+                        setLoading(false);
                     });
                 })
                 .catch(error => {
                     console.error('There was an error setting term response!', error);
-                });
+                }).finally(() => setLoading(false));
         },
     });
 
@@ -143,9 +148,10 @@ const Search = () => {
             </div>
 
             <div className="search-submit">
-                <button type="submit">Submit</button>
+                {!loading && <button type="submit">Submit</button>}
             </div>
         </form>
+        {loading && <div className="loading-div">Loading...</div>}
         {termResponse && <Result termResponse={termResponse}/>}
     </div>);
 };

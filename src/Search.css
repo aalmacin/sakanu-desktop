@@ -62,3 +62,13 @@
     border: 1px solid var(--color-error);
     background-color: var(--color-error-background);
 }
+
+/* Search.css */
+.loading-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 20px;
+    color: var(--primary-color);
+}
