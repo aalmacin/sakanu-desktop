@@ -4,14 +4,22 @@ import {Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
 
 const Terms = () => {
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
 
-    useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=3`)
+    const fetchTerms = () => {
+        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=10`)
             .then(response => response.json())
             .then(data => {
                 console.log('Terms:', data)
@@ -19,18 +27,69 @@ const Terms = () => {
                 setTotalPages(data.totalPages);
             })
             .catch(error => console.error('There was an error!', error));
+    };
+
+    useEffect(() => {
+        fetchTerms();
     }, [page]);
+
+    const handleOpen = (id) => () => {
+        setDeleteId(id);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleConfirmDelete = () => {
+        handleDelete(deleteId);
+        handleClose();
+    };
 
     const handlePageChange = (event, value) => {
         setPage(value);
+    };
+
+    const handleDelete = (id)  => {
+        fetch(`${process.env.REACT_APP_API_URL}/terms/term/${id}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Delete:', data)
+                fetchTerms();
+            })
+            .catch(error => console.error('There was an error!', error));
     };
 
     return (
         <Box>
             <Pagination count={totalPages} page={page} onChange={handlePageChange} />
             {results.map((result) => (
-                <CollapsiblePanel key={result.id} result={result}/>
+                <CollapsiblePanel key={result.id} result={result} onDelete={handleOpen(result.id)}/>
             ))}
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle>
+                    {"Confirm Delete"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete this term?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="primary" autoFocus>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 };
@@ -44,7 +103,7 @@ const TermResultItem = ({field, item}) => {
     );
 }
 
-const CollapsiblePanel = ({result}) => {
+const CollapsiblePanel = ({result, onDelete}) => {
     return (
         <Accordion>
             <AccordionSummary
@@ -82,6 +141,9 @@ const CollapsiblePanel = ({result}) => {
                             <Typography key={relatedTerm} variant="body1">{relatedTerm}</Typography>
                         ))}
                     </Box>
+                    <Button variant="contained" color="secondary" onClick={() => onDelete(result.id)}>
+                        Delete Term
+                    </Button>
                 </Box>
             </AccordionDetails>
         </Accordion>
