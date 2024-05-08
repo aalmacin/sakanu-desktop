@@ -144,6 +144,8 @@ const CollapsiblePanel = ({result, onDelete}) => {
                             <Typography key={relatedTerm} variant="body1">{relatedTerm}</Typography>
                         ))}
                     </Box>
+                    {/*TODO: Add to Anki button*/}
+                    {/*TODO: Refresh definition button*/}
                     <Button variant="contained" color="secondary" onClick={() => onDelete(result.id)}>
                         Delete Term
                     </Button>
