@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Pagination from '@mui/material/Pagination';
-import {Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
+import {Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -51,7 +51,7 @@ const Terms = () => {
         setPage(value);
     };
 
-    const handleDelete = (id)  => {
+    const handleDelete = (id) => {
         fetch(`${process.env.REACT_APP_API_URL}/terms/term/${id}`, {
             method: 'DELETE'
         })
@@ -65,7 +65,7 @@ const Terms = () => {
 
     return (
         <Box>
-            <Pagination count={totalPages} page={page} onChange={handlePageChange} />
+            <Pagination count={totalPages} page={page} onChange={handlePageChange}/>
             {results.map((result) => (
                 <CollapsiblePanel key={result.id} result={result} onDelete={handleOpen(result.id)}/>
             ))}
@@ -96,7 +96,7 @@ const Terms = () => {
 
 const TermResultItem = ({field, item}) => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+        <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
             <Typography variant="h6">{field}</Typography>
             <Typography variant="body1">{item}</Typography>
         </Box>
@@ -107,35 +107,38 @@ const CollapsiblePanel = ({result, onDelete}) => {
     return (
         <Accordion>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon/>}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Typography variant="h6">{result.domain}: {result.term}</Typography>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%'}}>
+                    <Typography variant="h6">{result.term}</Typography>
+                    <Typography variant="small"  sx={{ mr: 3 }}>{result.domain}</Typography>
+                </Box>
             </AccordionSummary>
             <AccordionDetails>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
                     <TermResultItem field="Term" item={result.term}/>
                     <TermResultItem field="Domain" item={result.domain}/>
                     <TermResultItem field="Description" item={result.description}/>
                     <TermResultItem field="Simple Explanation" item={result.simpleExplanation}/>
                     <TermResultItem field="Purpose" item={result.purpose}/>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
                         <Typography variant="subtitle1">Questions</Typography>
                         {result.questions.map((question, index) => (
-                            <Box key={index} sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                            <Box key={index} sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
                                 <Typography variant="body1">Question: {question.question}</Typography>
                                 <Typography variant="body1">Answer: {question.answer}</Typography>
                             </Box>
                         ))}
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
                         <Typography variant="subtitle1">Categories</Typography>
                         {result.categories.map((category) => (
                             <Typography key={category} variant="body1">{category}</Typography>
                         ))}
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                    <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
                         <Typography variant="subtitle1">Related Terms</Typography>
                         {result.relatedTerms.map((relatedTerm) => (
                             <Typography key={relatedTerm} variant="body1">{relatedTerm}</Typography>
