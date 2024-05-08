@@ -1,0 +1,60 @@
+/* Terms.css */
+
+.results {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.result-data {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.result-data-field {
+    font-weight: bold;
+    color: #333;
+}
+
+.result-data-value {
+    color: #666;
+}
+
+.result-data-value-ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.result-data-value-li {
+    margin-bottom: 5px;
+}
+
+.question {
+    margin-bottom: 10px;
+}
+
+.question-field {
+    font-weight: bold;
+    color: #333;
+}
+
+.question-value {
+    color: #666;
+}
+
+button {
+    margin: 10px 0;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

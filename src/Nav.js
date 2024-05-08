@@ -14,6 +14,7 @@ const Nav = () => {
                 <ul>
                     <li><Link to="/">Home</Link></li>
                     <li><Link to="/search">Search</Link></li>
+                    <li><Link to="/terms">Terms</Link></li>
                 </ul>
             </div>
             <AuthButton/>
