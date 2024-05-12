@@ -36,6 +36,7 @@ const Result = ({termResponse}) => {
             </ul>
             <h3>Anki Cloze</h3>
             <p>{termResponse.cloze}</p>
+            <div>Did not get the result you need? Try to update the domain to be more specific.</div>
         </div>
     );
 };
