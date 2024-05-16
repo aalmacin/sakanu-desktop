@@ -31,7 +31,7 @@ const Terms = () => {
 
     useEffect(() => {
         fetchTerms();
-    }, [page]);
+    });
 
     const handleOpen = (id) => () => {
         setDeleteId(id);

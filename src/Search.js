@@ -12,7 +12,7 @@ import {useAuth0} from "@auth0/auth0-react";
 
 
 const Search = () => {
-    const { user } = useAuth0();
+    const {getAccessTokenSilently, getAccessTokenWithPopup} = useAuth0();
     const [termResponse, setTermResponse] = useState(null);
     const [domains, setDomains] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -41,18 +41,45 @@ const Search = () => {
     const formik = useFormik({
         initialValues: {
             domain: '', searchTerm: ''
-        }, onSubmit: ({domain: {value: domain}, searchTerm}) => {
-            setLoading(true);
-            setTermResponse(null);
-            fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}?sub=${user.sub}`)
-                .then(response => response.json())
-                .then(data => {
-                    setTermResponse(data);
-                    setLoading(false);
+        }, onSubmit: async ({domain: {value: domain}, searchTerm}) => {
+            try {
+                setLoading(true);
+                setTermResponse(null);
+                let token;
+                try {
+                    token = await getAccessTokenSilently({
+                        authorizationParams: {
+                            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                            scope: "openid email profile",
+                            ignoreCache: false
+                        }
+                    });
+                } catch (error) {
+                    if (error.error === 'consent_required') {
+                        token = await getAccessTokenWithPopup({
+                            authorizationParams: {
+                                audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                                scope: "openid email profile"
+                            }
+                        });
+                    }
+                }
+                fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
                 })
-                .catch(error => {
-                    console.error('There was an error setting term response!', error);
-                }).finally(() => setLoading(false));
+                    .then(response => response.json())
+                    .then(data => {
+                        setTermResponse(data);
+                        setLoading(false);
+                    })
+                    .catch(error => {
+                        console.error('There was an error setting term response!', error);
+                    }).finally(() => setLoading(false));
+            } catch (error) {
+                console.error('There was an error!', error);
+            }
         },
     });
 
@@ -77,7 +104,8 @@ const Search = () => {
                 />
             </div>
             <Box>
-                <Typography variant="small">Tip: Make domain as specific as possible for better results. For example, instead
+                <Typography variant="small">Tip: Make domain as specific as possible for better results. For example,
+                    instead
                     of Biology, use Biology::Zoology::Herpetology</Typography>
             </Box>
 
