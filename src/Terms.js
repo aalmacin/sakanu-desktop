@@ -10,16 +10,42 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import {useAuth0} from "@auth0/auth0-react";
 
 const Terms = () => {
+    const {getAccessTokenSilently, getAccessTokenWithPopup} = useAuth0();
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [open, setOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    const fetchTerms = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=10`)
+    const fetchTerms = async () => {
+        let token;
+        try {
+            token = await getAccessTokenSilently({
+                authorizationParams: {
+                    audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                    scope: "openid email profile",
+                    ignoreCache: false
+                }
+            });
+        } catch (error) {
+            if (error.error === 'consent_required') {
+                token = await getAccessTokenWithPopup({
+                    authorizationParams: {
+                        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                        scope: "openid email profile"
+                    }
+                });
+            }
+        }
+        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=10`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log('Terms:', data)
@@ -30,8 +56,12 @@ const Terms = () => {
     };
 
     useEffect(() => {
-        fetchTerms();
-    });
+        setLoading(true);
+        fetchTerms().then(() => {
+            console.log('Terms fetched');
+            setLoading(false);
+        });
+    }, []);
 
     const handleOpen = (id) => () => {
         setDeleteId(id);
@@ -43,17 +73,41 @@ const Terms = () => {
     };
 
     const handleConfirmDelete = () => {
-        handleDelete(deleteId);
-        handleClose();
+        handleDelete(deleteId).then(() => {
+            console.log('Delete confirmed');
+            handleClose();
+        });
     };
 
     const handlePageChange = (event, value) => {
         setPage(value);
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = async (id) => {
+        let token;
+        try {
+            token = await getAccessTokenSilently({
+                authorizationParams: {
+                    audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                    scope: "openid email profile",
+                    ignoreCache: false
+                }
+            });
+        } catch (error) {
+            if (error.error === 'consent_required') {
+                token = await getAccessTokenWithPopup({
+                    authorizationParams: {
+                        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                        scope: "openid email profile"
+                    }
+                });
+            }
+        }
         fetch(`${process.env.REACT_APP_API_URL}/terms/term/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
         })
             .then(response => response.json())
             .then(data => {
@@ -62,6 +116,14 @@ const Terms = () => {
             })
             .catch(error => console.error('There was an error!', error));
     };
+
+    if(loading) {
+        return (
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <Typography variant="h3">Loading...</Typography>
+            </Box>
+        );
+    }
 
     return (
         <Box>
