@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
+import {useSakanuApi} from "./useSakanuApi";
 
 const Terms = () => {
     const [results, setResults] = useState([]);
@@ -17,10 +18,11 @@ const Terms = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [open, setOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const {loading, sakanuApi} = useSakanuApi();
 
-    const fetchTerms = () => {
-        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=10`)
-            .then(response => response.json())
+    const fetchTerms = async () => {
+        // fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=10`)
+        sakanuApi.getTerms(page)
             .then(data => {
                 console.log('Terms:', data)
                 setResults(data.content);
@@ -30,8 +32,12 @@ const Terms = () => {
     };
 
     useEffect(() => {
-        fetchTerms();
-    });
+        if(!loading) {
+            fetchTerms().then(() => {
+                console.log('Terms fetched');
+            });
+        }
+    }, [sakanuApi, loading]);
 
     const handleOpen = (id) => () => {
         setDeleteId(id);
@@ -62,6 +68,10 @@ const Terms = () => {
             })
             .catch(error => console.error('There was an error!', error));
     };
+
+    if(loading) {
+        return <Typography variant="h4">Loading...</Typography>;
+    }
 
     return (
         <Box>

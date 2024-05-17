@@ -8,14 +8,14 @@ import AddToAnki from "./AddToAnki";
 import {useAnkiConnect} from "./useAnkiConnect";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import {useAuth0} from "@auth0/auth0-react";
+import {useSakanuApi} from "./useSakanuApi";
 
 
 const Search = () => {
-    const {getAccessTokenSilently, getAccessTokenWithPopup} = useAuth0();
+    const {sakanuApi, loading: sakanuLoading} = useSakanuApi();
     const [termResponse, setTermResponse] = useState(null);
     const [domains, setDomains] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(sakanuLoading);
     const {ankiConnectError, ankiModelExists} = useAnkiConnect();
 
     // Function to fetch domains
@@ -45,31 +45,7 @@ const Search = () => {
             try {
                 setLoading(true);
                 setTermResponse(null);
-                let token;
-                try {
-                    token = await getAccessTokenSilently({
-                        authorizationParams: {
-                            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                            scope: "openid email profile",
-                            ignoreCache: false
-                        }
-                    });
-                } catch (error) {
-                    if (error.error === 'consent_required') {
-                        token = await getAccessTokenWithPopup({
-                            authorizationParams: {
-                                audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                                scope: "openid email profile"
-                            }
-                        });
-                    }
-                }
-                fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                })
-                    .then(response => response.json())
+                sakanuApi.learn(domain, searchTerm)
                     .then(data => {
                         setTermResponse(data);
                         setLoading(false);
