@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import Pagination from '@mui/material/Pagination';
 import {Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -21,7 +21,7 @@ const Terms = () => {
     const [deleteId, setDeleteId] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const fetchTerms = async () => {
+    const fetchTerms = useCallback(async () => {
         let token;
         try {
             token = await getAccessTokenSilently({
@@ -53,7 +53,7 @@ const Terms = () => {
                 setTotalPages(data.totalPages);
             })
             .catch(error => console.error('There was an error!', error));
-    };
+    }, [page, getAccessTokenSilently, getAccessTokenWithPopup]);
 
     useEffect(() => {
         setLoading(true);
@@ -112,7 +112,9 @@ const Terms = () => {
             .then(response => response.json())
             .then(data => {
                 console.log('Delete:', data)
-                fetchTerms();
+                fetchTerms().then(() => {
+                    console.log('Terms fetched');
+                });
             })
             .catch(error => console.error('There was an error!', error));
     };
