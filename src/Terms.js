@@ -61,7 +61,7 @@ const Terms = () => {
             console.log('Terms fetched');
             setLoading(false);
         });
-    }, []);
+    }, [fetchTerms]);
 
     const handleOpen = (id) => () => {
         setDeleteId(id);
