@@ -1,19 +1,10 @@
-import React, {useCallback, useEffect, useState} from "react";
-import Pagination from '@mui/material/Pagination';
-import {Accordion, AccordionSummary, AccordionDetails} from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import { Pagination, Accordion, AccordionSummary, AccordionDetails, Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogActions from '@mui/material/DialogActions';
-import {useAuth0} from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Terms = () => {
-    const {getAccessTokenSilently, getAccessTokenWithPopup} = useAuth0();
+    const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -48,18 +39,21 @@ const Terms = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Terms:', data)
+                console.log('Terms:', data);
                 setResults(data.content);
                 setTotalPages(data.totalPages);
+                setLoading(false);
             })
-            .catch(error => console.error('There was an error!', error));
+            .catch(error => {
+                console.error('There was an error!', error);
+                setLoading(false);
+            });
     }, [page, getAccessTokenSilently, getAccessTokenWithPopup]);
 
     useEffect(() => {
         setLoading(true);
         fetchTerms().then(() => {
             console.log('Terms fetched');
-            setLoading(false);
         });
     }, [fetchTerms]);
 
@@ -111,7 +105,7 @@ const Terms = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Delete:', data)
+                console.log('Delete:', data);
                 fetchTerms().then(() => {
                     console.log('Terms fetched');
                 });
@@ -119,24 +113,20 @@ const Terms = () => {
             .catch(error => console.error('There was an error!', error));
     };
 
-    if(loading || totalPages === 0) {
+    if (loading) {
         return (
-            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
-                <Typography variant="h3">Loading...</Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
             </Box>
         );
     }
 
     return (
         <Box>
-            <Pagination count={totalPages} page={page} onChange={handlePageChange}/>
             {results.map((result) => (
-                <CollapsiblePanel key={result.id} result={result} onDelete={handleOpen(result.id)}/>
+                <CollapsiblePanel key={result.id} result={result} onDelete={handleOpen(result.id)} />
             ))}
-            <Dialog
-                open={open}
-                onClose={handleClose}
-            >
+            <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>
                     {"Confirm Delete"}
                 </DialogTitle>
@@ -154,63 +144,66 @@ const Terms = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
+                <Pagination count={totalPages} page={page} onChange={handlePageChange} sx={{ mb: 4 }} />
+            </Box>
         </Box>
     );
 };
 
-const TermResultItem = ({field, item}) => {
+const TermResultItem = ({ field, item }) => {
     return (
-        <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
-            <Typography variant="h6">{field}</Typography>
-            <Typography variant="body1">{item}</Typography>
+        <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle1">{field}</Typography>
+            <Typography variant="body2">{item}</Typography>
         </Box>
     );
 }
 
-const CollapsiblePanel = ({result, onDelete}) => {
+const CollapsiblePanel = ({ result, onDelete }) => {
     return (
         <Accordion>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon/>}
+                expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%'}}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                     <Typography variant="h6">{result.term}</Typography>
-                    <Typography variant="small"  sx={{ mr: 3 }}>{result.domain}</Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', mr: 2 }}>{result.domain}</Typography>
                 </Box>
             </AccordionSummary>
             <AccordionDetails>
-                <Box sx={{display: 'flex', flexDirection: 'column'}}>
-                    <TermResultItem field="Term" item={result.term}/>
-                    <TermResultItem field="Domain" item={result.domain}/>
-                    <TermResultItem field="Description" item={result.description}/>
-                    <TermResultItem field="Simple Explanation" item={result.simpleExplanation}/>
-                    <TermResultItem field="Purpose" item={result.purpose}/>
-                    <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <TermResultItem field="Term" item={result.term} />
+                    <TermResultItem field="Domain" item={result.domain} />
+                    <TermResultItem field="Description" item={result.description} />
+                    <TermResultItem field="Simple Explanation" item={result.simpleExplanation} />
+                    <TermResultItem field="Purpose" item={result.purpose} />
+                    <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">Questions</Typography>
                         {result.questions.map((question, index) => (
-                            <Box key={index} sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
-                                <Typography variant="body1">Question: {question.question}</Typography>
-                                <Typography variant="body1">Answer: {question.answer}</Typography>
+                            <Box key={index} sx={{ ml: 2, mb: 1 }}>
+                                <Typography variant="body2">Q: {question.question}</Typography>
+                                <Typography variant="body2">A: {question.answer}</Typography>
                             </Box>
                         ))}
                     </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
+                    <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">Categories</Typography>
-                        {result.categories.map((category) => (
-                            <Typography key={category} variant="body1">{category}</Typography>
+                        {result.categories.map((category, index) => (
+                            <Typography key={index} variant="body2" sx={{ ml: 2 }}>{category}</Typography>
                         ))}
                     </Box>
-                    <Box sx={{display: 'flex', flexDirection: 'column', mb: 2}}>
+                    <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">Related Terms</Typography>
-                        {result.relatedTerms.map((relatedTerm) => (
-                            <Typography key={relatedTerm} variant="body1">{relatedTerm}</Typography>
+                        {result.relatedTerms.map((relatedTerm, index) => (
+                            <Typography key={index} variant="body2" sx={{ ml: 2 }}>{relatedTerm}</Typography>
                         ))}
                     </Box>
                     {/*TODO: Add to Anki button*/}
                     {/*TODO: Refresh definition button*/}
-                    <Button variant="contained" color="secondary" onClick={() => onDelete(result.id)}>
+                    <Button variant="contained" color="secondary" onClick={onDelete}>
                         Delete Term
                     </Button>
                 </Box>

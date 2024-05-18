@@ -1,44 +1,85 @@
-// Result.js
 import React from 'react';
-import './Result.css';
+import { Typography, Box, List, ListItem, ListItemText, Divider } from '@mui/material';
 
-const Result = ({termResponse}) => {
-    return (
-        <div className="result-container">
-            <h2>{termResponse.searchTerm}</h2>
-            <p>Domain: {termResponse.domain}</p>
-            <h3>Description</h3>
-            <p>{termResponse.description}</p>
-            <h3>Purpose</h3>
-            <p>{termResponse.purpose}</p>
-            <h3>ELI5 Explanation</h3>
-            <p>{termResponse.simpleExplanation}</p>
-            <h3>Questions:</h3>
-            <ul>
-                {termResponse.questions.map((question, index) => (
-                    <li key={index}>
-                        <p>Q: {question.question}</p>
-                        <p>A: {question.answer}</p>
-                    </li>
-                ))}
-            </ul>
-            <h3>Related Terms:</h3>
-            <ul>
-                {termResponse.relatedTerms.map((term, index) => (
-                    <li key={index}>{term}</li>
-                ))}
-            </ul>
-            <h3>Categories:</h3>
-            <ul>
-                {termResponse.categories.map((category, index) => (
-                    <li key={index}>{category}</li>
-                ))}
-            </ul>
-            <h3>Anki Cloze</h3>
-            <p>{termResponse.cloze}</p>
-            <div>Did not get the result you need? Try to update the domain to be more specific.</div>
-        </div>
-    );
+const Result = ({ termResponse }) => {
+        return (
+            <Box sx={{ mt: 4, mb: 4 }}>
+                    <Typography variant="h4" gutterBottom>
+                            {termResponse.searchTerm}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                            Domain: {termResponse.domain}
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            Description
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                            {termResponse.description}
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            Purpose
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                            {termResponse.purpose}
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            ELI5 Explanation
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                            {termResponse.simpleExplanation}
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            Questions:
+                    </Typography>
+                    <List>
+                            {termResponse.questions.map((question, index) => (
+                                <ListItem key={index}>
+                                        <ListItemText
+                                            primary={`Q: ${question.question}`}
+                                            secondary={`A: ${question.answer}`}
+                                        />
+                                </ListItem>
+                            ))}
+                    </List>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            Related Terms:
+                    </Typography>
+                    <List>
+                            {termResponse.relatedTerms.map((term, index) => (
+                                <ListItem key={index}>
+                                        <ListItemText primary={term} />
+                                </ListItem>
+                            ))}
+                    </List>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            Categories:
+                    </Typography>
+                    <List>
+                            {termResponse.categories.map((category, index) => (
+                                <ListItem key={index}>
+                                        <ListItemText primary={category} />
+                                </ListItem>
+                            ))}
+                    </List>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="h5" gutterBottom>
+                            Anki Cloze
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                            {termResponse.cloze}
+                    </Typography>
+                    <Divider sx={{ my: 2 }} />
+                    <Typography variant="body1" gutterBottom>
+                            Did not get the result you need? Try to update the domain to be more specific.
+                    </Typography>
+            </Box>
+        );
 };
 
 export default Result;

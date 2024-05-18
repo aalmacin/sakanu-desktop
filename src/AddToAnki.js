@@ -1,14 +1,12 @@
-import React, {useState} from 'react';
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import React, { useState } from 'react';
+import { Box, Button, Typography, Paper } from '@mui/material';
 import AnkiModelCreatorService from "./anki/AnkiModelService";
-import Typography from "@mui/material/Typography";
 import AnkiInstructions from "./AnkiInstructions";
 import AnkiDeckService from "./anki/AnkiDeckService";
 import AnkiNoteService from "./anki/AnkiNoteService";
-import {useAnkiConnect} from "./useAnkiConnect";
+import { useAnkiConnect } from "./useAnkiConnect";
 
-const AddToAnki = ({termResponse, domain}) => {
+const AddToAnki = ({ termResponse, domain }) => {
     const { ankiConnectError, ankiModelExists, setAnkiModelExists } = useAnkiConnect();
     const [isAddingCard, setIsAddingCard] = useState(false);
     const [isCardAdded, setIsCardAdded] = useState(false);
@@ -51,34 +49,41 @@ const AddToAnki = ({termResponse, domain}) => {
     };
 
     if (isAddingCard) {
-        return (<Box>
-            <Typography variant="h6">Adding card to Anki...</Typography>
-        </Box>);
+        return (
+            <Box sx={{ mt: 2 }}>
+                <Typography variant="h6" align="center">Adding card to Anki...</Typography>
+            </Box>
+        );
     }
 
     if (isCardAdded) {
-        return (<Box>
-            <Typography variant="h6">Card added to Anki!</Typography>
-        </Box>);
+        return (
+            <Box sx={{ mt: 2 }}>
+                <Typography variant="h6" align="center">Card added to Anki!</Typography>
+            </Box>
+        );
     }
 
     if (isShowInstructions && ankiConnectError) {
-        return <Box sx={{border: '1px solid grey', borderRadius: '4px', padding: '16px', marginTop: '16px'}}>
-            <AnkiInstructions/>
-        </Box>;
-
+        return (
+            <Paper sx={{ p: 2, mt: 2 }}>
+                <AnkiInstructions />
+            </Paper>
+        );
     }
 
     if (isShowInstructions && !ankiModelExists) {
-        return <Box className="create-model" padding={2}>
-            <p>Model does not exist</p>
-            <button className="create-model-button" onClick={createModel}>Create Model</button>
-        </Box>;
+        return (
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+                <Typography variant="body1" gutterBottom>Anki Model/Card Type does not exist</Typography>
+                <Button variant="contained" color="primary" onClick={createModel}>Click here to Create Model</Button>
+            </Box>
+        );
     }
 
     return (
-        <Box>
-            <Button variant="contained" color="primary" onClick={addAnkiHandler}>Add to Anki</Button>
+        <Box sx={{ mt: 2 }}>
+            <Button variant="contained" color="secondary" onClick={addAnkiHandler} fullWidth>Add to Anki</Button>
         </Box>
     );
 };

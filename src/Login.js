@@ -60,10 +60,6 @@ const Login = () => {
             </Grid>
             <Grid container spacing={4} sx={{mt: 4}}>
                 <Grid item xs={12} md={6}>
-                    <img src="/explain-like-five.webp" alt="Explain Like I'm Five"
-                         style={{width: '100%', height: 'auto', borderRadius: '8px'}}/>
-                </Grid>
-                <Grid item xs={12} md={6}>
                     <Paper elevation={4} sx={{p: 3}}>
                         <Typography variant="h5" gutterBottom>Explain Like I'm Five</Typography>
                         <Typography variant="body1" sx={{mb: 2}}>
@@ -71,6 +67,10 @@ const Login = () => {
                             explanations, making learning accessible and enjoyable for everyone.
                         </Typography>
                     </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <img src="/eli5.webp" alt="Explain Like I'm Five"
+                         style={{width: '100%', height: 'auto', borderRadius: '8px'}}/>
                 </Grid>
             </Grid>
             <Grid container spacing={4} sx={{mt: 4}}>

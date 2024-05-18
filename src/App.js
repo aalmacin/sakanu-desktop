@@ -25,7 +25,7 @@ const theme = createTheme({
 function App() {
     return (
         <ThemeProvider theme={theme}>
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" mb={3}>
                 <Router>
                     <Nav/>
                     <Box sx={{ pt: 4 }}>
