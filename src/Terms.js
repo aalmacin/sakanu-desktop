@@ -41,7 +41,7 @@ const Terms = () => {
                 });
             }
         }
-        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=10`, {
+        fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=20`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
@@ -119,7 +119,7 @@ const Terms = () => {
             .catch(error => console.error('There was an error!', error));
     };
 
-    if(loading) {
+    if(loading || totalPages === 0) {
         return (
             <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
                 <Typography variant="h3">Loading...</Typography>
