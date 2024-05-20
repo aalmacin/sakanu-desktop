@@ -1,8 +1,22 @@
 import React from 'react';
 import AuthButton from './AuthButton'; // Ensure the path is correct
 import {Box, Typography, Grid, Paper, Divider} from '@mui/material';
+import {useAuth0} from "@auth0/auth0-react";
+import {useNavigate} from "react-router-dom";
 
 const Login = () => {
+    const {isAuthenticated, isLoading} = useAuth0();
+    const navigate = useNavigate();
+
+    if(isLoading) {
+        return <Box>Loading...</Box>;
+    }
+
+    if (isAuthenticated) {
+        navigate('/');
+        return null;
+    }
+
     return (
         <Box sx={{flexGrow: 1, m: 2, p: 4}}>
             <Typography variant="h4" gutterBottom align="center">Welcome to Sakanu</Typography>

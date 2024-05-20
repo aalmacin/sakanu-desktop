@@ -7,6 +7,7 @@ import Nav from "./Nav";
 import Terms from "./Terms";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import { Container, Box } from '@mui/material';
+import NotFound from "./NotFound";
 
 const theme = createTheme({
     palette: {
@@ -46,6 +47,7 @@ function App() {
                                 </ProtectedRoute>
                             }/>
                             <Route path="/login" element={<Login/>}/>
+                            <Route path="*" element={<NotFound/>}/>
                         </Routes>
                     </Box>
                 </Router>

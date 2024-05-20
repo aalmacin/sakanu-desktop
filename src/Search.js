@@ -10,7 +10,7 @@ import { Typography, Box, TextField, Button, CircularProgress, Paper, Grid } fro
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Search = () => {
-    const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
+    const { getAccessTokenSilently, getAccessTokenWithRedirect } = useAuth0();
     const [termResponse, setTermResponse] = useState(null);
     const [domains, setDomains] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ const Search = () => {
                     });
                 } catch (error) {
                     if (error.error === 'consent_required') {
-                        token = await getAccessTokenWithPopup({
+                        token = await getAccessTokenWithRedirect({
                             authorizationParams: {
                                 audience: process.env.REACT_APP_AUTH0_AUDIENCE,
                                 scope: "openid email profile"
