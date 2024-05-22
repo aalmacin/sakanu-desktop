@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useFormik} from 'formik';
 import './Search.css';
 import Result from "./Result";
 import CreatableSelect from "react-select/creatable";
 import AnkiDeckService from "./anki/AnkiDeckService";
 import AddToAnki from "./AddToAnki";
-import { useAnkiConnect } from "./useAnkiConnect";
-import { Typography, Box, TextField, Button, CircularProgress, Paper, Grid } from '@mui/material';
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAnkiConnect} from "./useAnkiConnect";
+import {Typography, Box, TextField, Button, CircularProgress, Paper, Grid} from '@mui/material';
+import {useAuth0Consent} from "./auth0/useAuth0Consent";
 
 const Search = () => {
-    const { getAccessTokenSilently, getAccessTokenWithRedirect } = useAuth0();
     const [termResponse, setTermResponse] = useState(null);
     const [domains, setDomains] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { ankiConnectError, ankiModelExists } = useAnkiConnect();
+    const {ankiConnectError, ankiModelExists} = useAnkiConnect();
+    const {token} = useAuth0Consent();
+
 
     // Function to fetch domains
     const fetchDomains = () => {
@@ -39,29 +40,10 @@ const Search = () => {
         initialValues: {
             domain: '', searchTerm: ''
         },
-        onSubmit: async ({ domain: { value: domain }, searchTerm }) => {
+        onSubmit: async ({domain: {value: domain}, searchTerm}) => {
             try {
                 setLoading(true);
                 setTermResponse(null);
-                let token;
-                try {
-                    token = await getAccessTokenSilently({
-                        authorizationParams: {
-                            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                            scope: "openid email profile",
-                            ignoreCache: false
-                        }
-                    });
-                } catch (error) {
-                    if (error.error === 'consent_required') {
-                        token = await getAccessTokenWithRedirect({
-                            authorizationParams: {
-                                audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                                scope: "openid email profile"
-                            }
-                        });
-                    }
-                }
                 fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -82,11 +64,16 @@ const Search = () => {
     });
 
     // Options for react-select
-    const domainOptions = domains.map(domain => ({ label: domain, value: domain }));
+    const domainOptions = domains.map(domain => ({label: domain, value: domain}));
+
+    if (!token) {
+        return <Box sx={{p: 4}}><Typography variant="h4" align="center">Please accept consent to
+            continue</Typography></Box>;
+    }
 
     return (
         <Box sx={{flexGrow: 1, width: '100%'}}>
-            <Paper elevation={3} sx={{ p: 4 }}>
+            <Paper elevation={3} sx={{p: 4}}>
                 <Typography variant="h4" align="center" gutterBottom>
                     Search
                 </Typography>
@@ -113,7 +100,8 @@ const Search = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="body2">
-                                Tip: Make domain as specific as possible for better results. For example, instead of Biology, use Biology::Zoology::Herpetology
+                                Tip: Make domain as specific as possible for better results. For example, instead of
+                                Biology, use Biology::Zoology::Herpetology
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -123,7 +111,7 @@ const Search = () => {
                                         Submit
                                     </Button>
                                 ) : (
-                                    <CircularProgress />
+                                    <CircularProgress/>
                                 )}
                             </Box>
                         </Grid>
@@ -131,8 +119,8 @@ const Search = () => {
                 </form>
                 {termResponse && (
                     <Box mt={4}>
-                        <Result termResponse={termResponse} />
-                        <AddToAnki termResponse={termResponse} domain={termResponse.domain} />
+                        <Result termResponse={termResponse}/>
+                        <AddToAnki termResponse={termResponse} domain={termResponse.domain}/>
                     </Box>
                 )}
             </Paper>
