@@ -36,7 +36,7 @@ const Result = ({ termResponse }) => {
                             Questions:
                     </Typography>
                     <List>
-                            {termResponse.questions.map((question, index) => (
+                            {termResponse.questions && termResponse.questions.map((question, index) => (
                                 <ListItem key={index}>
                                         <ListItemText
                                             primary={`Q: ${question.question}`}
@@ -50,7 +50,7 @@ const Result = ({ termResponse }) => {
                             Related Terms:
                     </Typography>
                     <List>
-                            {termResponse.relatedTerms.map((term, index) => (
+                            {termResponse.relatedTerms && termResponse.relatedTerms.map((term, index) => (
                                 <ListItem key={index}>
                                         <ListItemText primary={term} />
                                 </ListItem>
@@ -61,7 +61,7 @@ const Result = ({ termResponse }) => {
                             Categories:
                     </Typography>
                     <List>
-                            {termResponse.categories.map((category, index) => (
+                            {termResponse.categories && termResponse.categories.map((category, index) => (
                                 <ListItem key={index}>
                                         <ListItemText primary={category} />
                                 </ListItem>

@@ -15,6 +15,7 @@ const Search = () => {
     const [loading, setLoading] = useState(false);
     const {ankiConnectError, ankiModelExists} = useAnkiConnect();
     const {token} = useAuth0Consent();
+    const [errorMessage, setErrorMessage] = useState(null);
 
 
     // Function to fetch domains
@@ -41,22 +42,34 @@ const Search = () => {
             domain: '', searchTerm: ''
         },
         onSubmit: async ({domain: {value: domain}, searchTerm}) => {
+            setErrorMessage(null);
             try {
                 setLoading(true);
                 setTermResponse(null);
-                fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        setTermResponse(data);
-                        setLoading(false);
+                if (!domain || !searchTerm) {
+                    setErrorMessage("Please enter both domain and search term");
+                    setLoading(false);
+                } else {
+                    fetch(`${process.env.REACT_APP_API_URL}/learn/${domain}/${searchTerm}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
                     })
-                    .catch(error => {
-                        console.error('There was an error setting term response!', error);
-                    }).finally(() => setLoading(false));
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data || data.status === 404) {
+                                setErrorMessage("A failure occurred. Please try again.")
+                            } else if (data.detail) {
+                                setErrorMessage(data.detail)
+                            } else {
+                                setTermResponse(data);
+                            }
+                            setLoading(false);
+                        })
+                        .catch(error => {
+                            console.error('There was an error setting term response!', error);
+                        }).finally(() => setLoading(false));
+                }
             } catch (error) {
                 console.error('There was an error!', error);
             }
@@ -117,7 +130,10 @@ const Search = () => {
                         </Grid>
                     </Grid>
                 </form>
-                {termResponse && (
+                {errorMessage && <Box mt={4}>
+                    <Typography variant="h5" color="error">{errorMessage}</Typography>
+                </Box>}
+                {!errorMessage && termResponse && (
                     <Box mt={4}>
                         <Result termResponse={termResponse}/>
                         <AddToAnki termResponse={termResponse} domain={termResponse.domain}/>

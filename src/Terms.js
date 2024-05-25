@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Pagination, Accordion, AccordionSummary, AccordionDetails, Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useAuth0 } from "@auth0/auth0-react";
+import {useAuth0Consent} from "./auth0/useAuth0Consent";
 
 const Terms = () => {
-    const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
+    const {token} = useAuth0Consent();
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -13,25 +13,6 @@ const Terms = () => {
     const [loading, setLoading] = useState(false);
 
     const fetchTerms = useCallback(async () => {
-        let token;
-        try {
-            token = await getAccessTokenSilently({
-                authorizationParams: {
-                    audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                    scope: "openid email profile",
-                    ignoreCache: false
-                }
-            });
-        } catch (error) {
-            if (error.error === 'consent_required') {
-                token = await getAccessTokenWithPopup({
-                    authorizationParams: {
-                        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                        scope: "openid email profile"
-                    }
-                });
-            }
-        }
         fetch(`${process.env.REACT_APP_API_URL}/terms?page=${page}&size=20`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -48,7 +29,7 @@ const Terms = () => {
                 console.error('There was an error!', error);
                 setLoading(false);
             });
-    }, [page, getAccessTokenSilently, getAccessTokenWithPopup]);
+    }, [page, token]);
 
     useEffect(() => {
         setLoading(true);
@@ -78,25 +59,6 @@ const Terms = () => {
     };
 
     const handleDelete = async (id) => {
-        let token;
-        try {
-            token = await getAccessTokenSilently({
-                authorizationParams: {
-                    audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                    scope: "openid email profile",
-                    ignoreCache: false
-                }
-            });
-        } catch (error) {
-            if (error.error === 'consent_required') {
-                token = await getAccessTokenWithPopup({
-                    authorizationParams: {
-                        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-                        scope: "openid email profile"
-                    }
-                });
-            }
-        }
         fetch(`${process.env.REACT_APP_API_URL}/terms/term/${id}`, {
             method: 'DELETE',
             headers: {
