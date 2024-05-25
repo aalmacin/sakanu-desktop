@@ -19,9 +19,9 @@ const Login = () => {
 
     return (
         <Box sx={{flexGrow: 1, m: 2, p: 4}}>
-            <Typography variant="h4" gutterBottom align="center">Welcome to Sakanu</Typography>
+            <Typography variant="h4" gutterBottom align="center">Welcome to Sumelu</Typography>
             <Typography variant="h6" gutterBottom align="center" sx={{mb: 4}}>
-                Transform Your Learning Journey with Sakanu Search Engine
+                Transform Your Learning Journey with Sumelu Learning Search Engine
             </Typography>
             <Grid container justifyContent="center" sx={{mb: 4}}>
                 <Grid item>
@@ -37,7 +37,7 @@ const Login = () => {
                 <Divider sx={{width: '100%', mb: 2}}/>
                 <Grid item>
                     <Typography variant="h4" align="center" gutterBottom>
-                        What is Sakanu?
+                        What is Sumelu?
                     </Typography>
                 </Grid>
             </Grid>
@@ -46,7 +46,7 @@ const Login = () => {
                     <Paper elevation={4} sx={{p: 3}}>
                         <Typography variant="h5" gutterBottom>Personalized Learning Experience</Typography>
                         <Typography variant="body1" sx={{mb: 2}}>
-                            Discover the power of AI with Sakanu. Our advanced search engine provides comprehensive
+                            Discover the power of AI with Sumelu. Our advanced search engine provides comprehensive
                             descriptions, simplified explanations, and categorized content tailored just for you. You
                             also have the option to send your flashcards to Anki for efficient review sessions.
                         </Typography>
@@ -66,7 +66,7 @@ const Login = () => {
                     <Paper elevation={4} sx={{p: 3}}>
                         <Typography variant="h5" gutterBottom>Seamless Anki Integration</Typography>
                         <Typography variant="body1" sx={{mb: 2}}>
-                            Enhance your review sessions with Sakanu. Our seamless integration with Anki allows you to
+                            Enhance your review sessions with Sumelu. Our seamless integration with Anki allows you to
                             optionally send decks and cards, helping you retain information better and learn smarter.
                         </Typography>
                     </Paper>
@@ -77,7 +77,7 @@ const Login = () => {
                     <Paper elevation={4} sx={{p: 3}}>
                         <Typography variant="h5" gutterBottom>Explain Like I'm Five</Typography>
                         <Typography variant="body1" sx={{mb: 2}}>
-                            Sometimes, simplicity is key. Sakanu breaks down complex ideas into easy-to-understand
+                            Sometimes, simplicity is key. Sumelu breaks down complex ideas into easy-to-understand
                             explanations, making learning accessible and enjoyable for everyone.
                         </Typography>
                     </Paper>
@@ -96,7 +96,7 @@ const Login = () => {
                     <Paper elevation={4} sx={{p: 3}}>
                         <Typography variant="h5" gutterBottom>Join Our Community</Typography>
                         <Typography variant="body1" sx={{mb: 2}}>
-                            Ready to elevate your learning experience? Sign up or log in to start using Sakanu today and
+                            Ready to elevate your learning experience? Sign up or log in to start using Sumelu today and
                             become part of our growing community of learners.
                         </Typography>
                         <AuthButton/>

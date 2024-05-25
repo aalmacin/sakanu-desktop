@@ -7,15 +7,15 @@ const Home = () => {
         <Paper elevation={3} sx={{textAlign: 'center', width: '100%'}}>
             <Box py={2} px={3}>
                 <Typography variant="h2" component="h1" gutterBottom>
-                    Welcome to Sakanu
+                    Welcome to Sumelu
                 </Typography>
                 <Typography variant="h5" component="h2" gutterBottom>
                     Your Ultimate Study Companion
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                    Welcome to <span style={{fontWeight: 'bold', color: '#1976d2'}}>Sakanu</span>, the web app designed
+                    Welcome to <span style={{fontWeight: 'bold', color: '#1976d2'}}>Sumelu</span>, the web app designed
                     to make your learning experience smooth and effective. Whether you're a student, a professional, or
-                    a lifelong learner, Sakanu is here to assist you with your studies.
+                    a lifelong learner, Sumelu is here to assist you with your studies.
                 </Typography>
                 <Box sx={{display: 'flex', justifyContent: 'center', mb: 4}}>
                     <Button
@@ -29,7 +29,7 @@ const Home = () => {
                     </Button>
                 </Box>
                 <Typography variant="body1" gutterBottom>
-                    With Sakanu, you can:
+                    With Sumelu, you can:
                 </Typography>
                 <List>
                     <ListItem>
@@ -64,12 +64,12 @@ const Home = () => {
                     </ListItem>
                 </List>
                 <Typography textAlign="left" variant="body1" gutterBottom>
-                    All you need to do is enter a term or concept, and Sakanu will provide you with all the information
+                    All you need to do is enter a term or concept, and Sumelu will provide you with all the information
                     you need to boost your knowledge. Plus, if you’re an Anki user, you can seamlessly add any card to
                     your Anki deck for future review.
                 </Typography>
                 <Typography variant="h6" mt={3}>
-                    Start exploring and make your learning journey enjoyable and productive with Sakanu!
+                    Start exploring and make your learning journey enjoyable and productive with Sumelu!
                 </Typography>
             </Box>
         </Paper>

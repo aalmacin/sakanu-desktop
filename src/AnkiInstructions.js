@@ -12,7 +12,7 @@ const AnkiInstructions = () => {
                         rel="noreferrer"
                         href="https://ankiweb.net/shared/info/2055492159" target="_blank">AnkiWeb</a></li>
                     <li>Under tools, click on Add-ons. Select AnkiConnect and click on Config. Add
-                        "https://sakanu.raidrin.com" on webCorsOriginList. It should look like this
+                        "https://sumelu.com" on webCorsOriginList. It should look like this
                         <div>
                             <img src="/corslist.png" alt="Showing addon config"/>
                         </div>
