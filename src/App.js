@@ -10,6 +10,20 @@ import { Container, Box } from '@mui/material';
 import NotFound from "./NotFound";
 
 const theme = createTheme({
+    typography: {
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+    },
     palette: {
         primary: {
             main: '#4682B4',
