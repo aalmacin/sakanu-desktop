@@ -65,6 +65,7 @@ const SearchVisual = ({url, setTermResponse, setErrorMessage, domains, token}) =
             <Typography variant="h4" align="center" gutterBottom>
                 Sumelu Search
             </Typography>
+            <Typography variant="body2" align="center" gutterBottom mb={2}>AI-Powered Learning Search Engine</Typography>
             <form onSubmit={formik.handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
