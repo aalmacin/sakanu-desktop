@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './Search.css';
 import Result from "./Result";
 import AnkiDeckService from "./anki/AnkiDeckService";
@@ -17,7 +17,7 @@ const Search = () => {
 
 
     // Function to fetch domains
-    const fetchDomains = () => {
+    const fetchDomains = useCallback(() => {
         AnkiDeckService.getDecks().then(response => {
             console.log('Domain Response:', response)
             return response.json();
@@ -27,13 +27,13 @@ const Search = () => {
         }).catch(error => {
             console.error('There was an error!', error);
         });
-    };
+    }, [domains]);
 
     useEffect(() => {
         if (!ankiConnectError && !ankiModelExists) {
             fetchDomains();
         }
-    }, [ankiConnectError, ankiModelExists]);
+    }, [ankiConnectError, ankiModelExists, fetchDomains]);
 
     useEffect(() => {
         if(!consentLoading) {
@@ -49,7 +49,7 @@ const Search = () => {
                 console.error('There was an error!', error);
             });
         }
-    }, [consentLoading, token]);
+    }, [consentLoading, token, domains]);
 
     if (consentLoading) {
         return <CircularProgress/>;
