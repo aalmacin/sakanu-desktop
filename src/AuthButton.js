@@ -1,13 +1,14 @@
 import React, {useCallback} from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Button } from '@mui/material';
+import {useAuth0} from "@auth0/auth0-react";
+import {Button} from '@mui/material';
 
-const AuthButton = () => {
-    const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+const AuthButton = ({text}) => {
+    const {isAuthenticated, loginWithRedirect, logout} = useAuth0();
 
     const login = useCallback(() => {
-        loginWithRedirect({
+        return loginWithRedirect({
             authorizationParams: {
+                redirect_uri: `${window.location.origin}/search`,
                 audience: process.env.REACT_APP_AUTH0_AUDIENCE,
                 scope: "openid email profile",
             },
@@ -15,12 +16,13 @@ const AuthButton = () => {
     }, [loginWithRedirect]);
 
     return isAuthenticated ? (
-        <Button variant="contained" color="secondary" onClick={() => logout({ returnTo: window.location.origin })}>
+        <Button variant="contained" color="secondary"
+                onClick={() => logout({logoutParams: {returnTo: `${window.location.origin}`}})}>
             Log Out
         </Button>
     ) : (
         <Button variant="contained" color="primary" onClick={login}>
-            Log In
+            {text || "Log In"}
         </Button>
     );
 };

@@ -57,7 +57,7 @@ const Search = () => {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            if (!data || data.status === 404) {
+                            if (!data || data.status === 404 || data.status === 500) {
                                 setErrorMessage("A failure occurred. Please try again.")
                             } else if (data.detail) {
                                 setErrorMessage(data.detail)

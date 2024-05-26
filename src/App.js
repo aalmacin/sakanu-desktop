@@ -2,12 +2,13 @@ import ProtectedRoute from "./ProtectedRoute";
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Home from "./Home";
 import Search from "./Search";
-import Login from "./Login";
+import About from "./About";
 import Nav from "./Nav";
 import Terms from "./Terms";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import { Container, Box } from '@mui/material';
 import NotFound from "./NotFound";
+import GlobalSearch from "./GlobalSearch";
 
 const theme = createTheme({
     typography: {
@@ -46,13 +47,11 @@ function App() {
                     <Box sx={{ pt: 4 }}>
                         <Routes>
                             <Route path="/" element={
+                                <GlobalSearch />
+                            }/>
+                            <Route path="/welcome" element={
                                 <ProtectedRoute>
                                     <Home/>
-                                </ProtectedRoute>
-                            }/>
-                            <Route path="/search" element={
-                                <ProtectedRoute>
-                                    <Search/>
                                 </ProtectedRoute>
                             }/>
                             <Route path="/terms" element={
@@ -60,7 +59,12 @@ function App() {
                                     <Terms/>
                                 </ProtectedRoute>
                             }/>
-                            <Route path="/login" element={<Login/>}/>
+                            <Route path="/search" element={
+                                <ProtectedRoute>
+                                    <Search/>
+                                </ProtectedRoute>
+                            }/>
+                            <Route path="/about" element={<About/>}/>
                             <Route path="*" element={<NotFound/>}/>
                         </Routes>
                     </Box>

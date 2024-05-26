@@ -20,6 +20,12 @@ const Nav = () => {
                         <Button color="inherit" component={Link} to="/terms">Terms</Button>
                     </>
                 )}
+                {!isAuthenticated && (
+                    <>
+                        <Button color="inherit" component={Link} to="/">Search Now!</Button>
+                        <Button color="inherit" component={Link} to="/about">What is Sumelu?</Button>
+                    </>
+                )}
                 <AuthButton/>
             </Toolbar>
         </AppBar>
