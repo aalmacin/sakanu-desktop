@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  window.location.href = "https://sumelu.com";
+
   return (
     <div className="App">
       <header className="App-header">
