@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthButton from './AuthButton'; // Ensure the path is correct
-import {Box, Typography, Grid, Paper, Divider} from '@mui/material';
+import {Box, Typography, Grid, Paper, Divider, CircularProgress} from '@mui/material';
 import {useAuth0} from "@auth0/auth0-react";
 import {useNavigate} from "react-router-dom";
 
@@ -9,7 +9,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     if(isLoading) {
-        return <Box>Loading...</Box>;
+        return <CircularProgress />;
     }
 
     if (isAuthenticated) {

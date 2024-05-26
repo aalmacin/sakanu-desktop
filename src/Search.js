@@ -14,7 +14,7 @@ const Search = () => {
     const [domains, setDomains] = useState([]);
     const [loading, setLoading] = useState(false);
     const {ankiConnectError, ankiModelExists} = useAnkiConnect();
-    const {token} = useAuth0Consent();
+    const {token, loading: consentLoading} = useAuth0Consent();
     const [errorMessage, setErrorMessage] = useState(null);
 
 
@@ -79,7 +79,11 @@ const Search = () => {
     // Options for react-select
     const domainOptions = domains.map(domain => ({label: domain, value: domain}));
 
-    if (!token) {
+    if (consentLoading) {
+        return <CircularProgress/>;
+    }
+
+    if (!token && !consentLoading) {
         return <Box sx={{p: 4}}><Typography variant="h4" align="center">Please accept consent to
             continue</Typography></Box>;
     }

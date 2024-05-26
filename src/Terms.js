@@ -1,10 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Pagination, Accordion, AccordionSummary, AccordionDetails, Box, Typography, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, CircularProgress } from '@mui/material';
+import React, {useCallback, useEffect, useState} from "react";
+import {
+    Pagination,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Box,
+    Typography,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    CircularProgress
+} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {useAuth0Consent} from "./auth0/useAuth0Consent";
 
 const Terms = () => {
-    const {token} = useAuth0Consent();
+    const {token, loading: consentLoading} = useAuth0Consent();
     const [results, setResults] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -75,18 +89,30 @@ const Terms = () => {
             .catch(error => console.error('There was an error!', error));
     };
 
+    if (consentLoading) {
+        return <CircularProgress/>;
+    }
+
     if (loading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress />
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <CircularProgress/>
+            </Box>
+        );
+    }
+
+    if (results.length === 0) {
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+                <Typography variant="h4">No terms found</Typography>
             </Box>
         );
     }
 
     return (
         <Box>
-            {results.map((result) => (
-                <CollapsiblePanel key={result.id} result={result} onDelete={handleOpen(result.id)} />
+            {results && results.map((result) => (
+                <CollapsiblePanel key={result.id} result={result} onDelete={handleOpen(result.id)}/>
             ))}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>
@@ -106,61 +132,61 @@ const Terms = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
-            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-                <Pagination count={totalPages} page={page} onChange={handlePageChange} sx={{ mb: 4 }} />
+            <Box sx={{mt: 3, display: 'flex', justifyContent: 'center'}}>
+                <Pagination count={totalPages} page={page} onChange={handlePageChange} sx={{mb: 4}}/>
             </Box>
         </Box>
     );
 };
 
-const TermResultItem = ({ field, item }) => {
+const TermResultItem = ({field, item}) => {
     return (
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{mb: 2}}>
             <Typography variant="subtitle1">{field}</Typography>
             <Typography variant="body2">{item}</Typography>
         </Box>
     );
 }
 
-const CollapsiblePanel = ({ result, onDelete }) => {
+const CollapsiblePanel = ({result, onDelete}) => {
     return (
         <Accordion>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon/>}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
             >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
                     <Typography variant="h6">{result.term}</Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', mr: 2 }}>{result.domain}</Typography>
+                    <Typography variant="body2" sx={{color: 'text.secondary', mr: 2}}>{result.domain}</Typography>
                 </Box>
             </AccordionSummary>
             <AccordionDetails>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <TermResultItem field="Term" item={result.term} />
-                    <TermResultItem field="Domain" item={result.domain} />
-                    <TermResultItem field="Description" item={result.description} />
-                    <TermResultItem field="Simple Explanation" item={result.simpleExplanation} />
-                    <TermResultItem field="Purpose" item={result.purpose} />
-                    <Box sx={{ mb: 2 }}>
+                <Box sx={{display: 'flex', flexDirection: 'column'}}>
+                    <TermResultItem field="Term" item={result.term}/>
+                    <TermResultItem field="Domain" item={result.domain}/>
+                    <TermResultItem field="Description" item={result.description}/>
+                    <TermResultItem field="Simple Explanation" item={result.simpleExplanation}/>
+                    <TermResultItem field="Purpose" item={result.purpose}/>
+                    <Box sx={{mb: 2}}>
                         <Typography variant="subtitle1">Questions</Typography>
-                        {result.questions.map((question, index) => (
-                            <Box key={index} sx={{ ml: 2, mb: 1 }}>
+                        {result.questions && result.questions.map((question, index) => (
+                            <Box key={index} sx={{ml: 2, mb: 1}}>
                                 <Typography variant="body2">Q: {question.question}</Typography>
                                 <Typography variant="body2">A: {question.answer}</Typography>
                             </Box>
                         ))}
                     </Box>
-                    <Box sx={{ mb: 2 }}>
+                    <Box sx={{mb: 2}}>
                         <Typography variant="subtitle1">Categories</Typography>
-                        {result.categories.map((category, index) => (
-                            <Typography key={index} variant="body2" sx={{ ml: 2 }}>{category}</Typography>
+                        {result.categories && result.categories.map((category, index) => (
+                            <Typography key={index} variant="body2" sx={{ml: 2}}>{category}</Typography>
                         ))}
                     </Box>
-                    <Box sx={{ mb: 2 }}>
+                    <Box sx={{mb: 2}}>
                         <Typography variant="subtitle1">Related Terms</Typography>
-                        {result.relatedTerms.map((relatedTerm, index) => (
-                            <Typography key={index} variant="body2" sx={{ ml: 2 }}>{relatedTerm}</Typography>
+                        {result.relatedTerms && result.relatedTerms.map((relatedTerm, index) => (
+                            <Typography key={index} variant="body2" sx={{ml: 2}}>{relatedTerm}</Typography>
                         ))}
                     </Box>
                     {/*TODO: Add to Anki button*/}
