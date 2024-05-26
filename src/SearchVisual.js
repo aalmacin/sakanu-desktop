@@ -13,7 +13,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React, {useState} from "react";
 import {useFormik} from "formik";
 
-const SearchVisual = ({url, setTermResponse, setErrorMessage, domains}) => {
+const SearchVisual = ({url, setTermResponse, setErrorMessage, domains, token}) => {
     const [loading, setLoading] = useState(false);
     const formik = useFormik({
         initialValues: {
@@ -33,7 +33,13 @@ const SearchVisual = ({url, setTermResponse, setErrorMessage, domains}) => {
                     if (domain) {
                         searchUrl += `?domain=${domain}`;
                     }
-                    fetch(searchUrl)
+                    const headers = {headers: {}};
+                    if(token) {
+                        headers.headers = {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                    fetch(searchUrl, headers)
                         .then(response => response.json())
                         .then(data => {
                             if (!data || data.status >= 400) {
