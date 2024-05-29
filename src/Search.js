@@ -15,41 +15,39 @@ const Search = () => {
     const {token, loading: consentLoading} = useAuth0Consent();
     const [errorMessage, setErrorMessage] = useState(null);
 
-
     // Function to fetch domains
-    const fetchDomains = useCallback(() => {
+    const fetchDomains = useCallback((currentDomains) => {
         AnkiDeckService.getDecks().then(response => {
             console.log('Domain Response:', response)
             return response.json();
         }).then(data => {
             console.log('Domains:', data)
-            setDomains(new Set([...domains, ...data.result]));
+            setDomains(new Set([...currentDomains, ...data.result]));
         }).catch(error => {
             console.error('There was an error!', error);
         });
-    }, [domains]);
+    }, []);
 
     useEffect(() => {
-        if (!ankiConnectError && !ankiModelExists) {
-            fetchDomains();
-        }
-    }, [ankiConnectError, ankiModelExists, fetchDomains]);
-
-    useEffect(() => {
-        if(!consentLoading) {
+        if(!consentLoading && token) {
+            console.log('Fetching domains', token);
             fetch(`${process.env.REACT_APP_API_URL}/terms/domains`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             })
                 .then(response => response.json())
-                .then(data => {
-                    setDomains(new Set([...domains, ...data]));
+                .then(currentDomains => {
+                    if (!ankiConnectError && ankiModelExists) {
+                        fetchDomains(currentDomains);
+                    } else {
+                        setDomains(new Set([...currentDomains]));
+                    }
                 }).catch(error => {
                 console.error('There was an error!', error);
             });
         }
-    }, [consentLoading, token, domains]);
+    }, [ankiConnectError, ankiModelExists, fetchDomains, consentLoading, token]);
 
     if (consentLoading) {
         return <CircularProgress/>;
