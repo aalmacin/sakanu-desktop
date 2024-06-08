@@ -31,11 +31,7 @@ const Search = () => {
     useEffect(() => {
         if(!consentLoading && token) {
             console.log('Fetching domains', token);
-            fetch(`${process.env.REACT_APP_API_URL}/terms/domains`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            })
+            fetch(`${process.env.REACT_APP_API_URL}/global/domains`)
                 .then(response => response.json())
                 .then(currentDomains => {
                     if (!ankiConnectError && ankiModelExists) {
